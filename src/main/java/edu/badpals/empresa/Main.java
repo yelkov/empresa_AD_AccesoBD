@@ -1,17 +1,23 @@
 package edu.badpals.empresa;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        DatabaseManager dbm = new DatabaseManager();
+        dbm.conectarDB();
+        try(ResultSet rs = dbm.statement.executeQuery("select * from departamento")){
+            while(rs.next()){
+                System.out.println(rs.getInt("num_departamento"));
+                System.out.println(rs.getString("nome_departamento"));
+                System.out.println(rs.getString("nss_dirige"));
+                System.out.println(rs.getDate("data_direccion"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
     }
 }
