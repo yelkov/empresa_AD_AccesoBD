@@ -12,6 +12,7 @@ public class Main {
         DatabaseManager.conectarDB();
 
         //ejercicio2_1();
+        ejercicio2_2();
 
     }
 
@@ -20,11 +21,15 @@ public class Main {
         DatabaseManager.subirSalarioDepartamento(1000,10);
         DatabaseManager.crearDepartamento(1,"VENTAS","1231231");
         DatabaseManager.crearDepartamento(7,"VENTAS","1231231");
-        DatabaseManager.crearDepartamento(8,"ADMINISTRACION","9999999");
+        DatabaseManager.crearDepartamento(8,"VENTAS","1231231");
+        DatabaseManager.crearDepartamento(9,"ADMINISTRACION","9999999");
         DatabaseManager.borrarEmpleadoProyecto("9990009",7);
+        DatabaseManager.borrarEmpleadoProyecto("9990009",200);
+        DatabaseManager.borrarEmpleadoProyecto("9999999",7);
     }
 
     public static void ejercicio2_2(){
-
+        DatabaseManager.getEmpleadosLocalidad("Vigo");
+        DatabaseManager.getEmpleadosLocalidad("Casablanca");
     }
 }
