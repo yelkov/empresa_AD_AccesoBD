@@ -12,8 +12,10 @@ public class Main {
         DatabaseManager.conectarDB();
 
         //ejercicio2_1();
-        ejercicio2_2();
+        //ejercicio2_2();
+        ejercicio2_3();
 
+        DatabaseManager.desconectarDB();
     }
 
     public static void ejercicio2_1(){
@@ -31,5 +33,12 @@ public class Main {
     public static void ejercicio2_2(){
         DatabaseManager.getEmpleadosLocalidad("Vigo");
         DatabaseManager.getEmpleadosLocalidad("Casablanca");
+    }
+
+    public static void ejercicio2_3(){
+        DatabaseManager.cambiarDepartamento("PERSOAL","XESTION DE PERSOAL");
+        Proxecto proxecto = new Proxecto("PROYECTO DE PRUEBA","CANGAS",1);
+        DatabaseManager.insertProyecto(proxecto);
+        DatabaseManager.borrarProyecto(1);
     }
 }

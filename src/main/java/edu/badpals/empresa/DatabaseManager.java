@@ -116,7 +116,7 @@ public class DatabaseManager {
                     "    from empregado as e1\n" +
                     "    where LOCALIDADE = '"+localidad+"'");
             if(!rs.next()){
-                System.out.println("No hay empleados registrados de: "+localidad);
+                System.out.println("No hay empleados registrados de "+localidad);
             }else{
                 System.out.println("Los empleados de "+localidad+" registrados son: ");
                 while (rs.next()){
@@ -148,8 +148,69 @@ public class DatabaseManager {
         }
     }
 
+    public static void cambiarDepartamento(String nombreDepartamento, String nombreProyecto){
+        try{
+            String query = """
+                            UPDATE proxecto
+                                SET NUM_DEPARTAMENTO = (
+                                                    SELECT NUM_DEPARTAMENTO
+                                                    FROM departamento
+                                                    WHERE NOME_DEPARTAMENTO = ?
+                                                    )
+                                WHERE NOME_PROXECTO = ?""";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, nombreDepartamento);
+            ps.setString(2, nombreProyecto);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("El proyecto "+nombreProyecto+" ahora está dirigido por el departamento: "+nombreDepartamento);
 
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar el departamento de proyecto.");
+        }
+    }
 
+    public static void  insertProyecto(Proxecto proxecto){
+        try{
+            String query = """
+                                INSERT INTO proxecto 
+                                (NOME_PROXECTO, LUGAR, NUM_DEPARTAMENTO)
+                                VALUES (?,?,?)""";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, proxecto.getNome_proxecto());
+            ps.setString(2, proxecto.getLugar());
+            ps.setInt(3, proxecto.getNum_departamento());
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("El proyecto fue creado exitosamente.");
+        }catch (SQLException e){
+            System.out.println("Error al insertar el proyecto ");
+        }
+    }
+
+    public static void borrarProyecto(int numProyecto){
+        try{
+            String borrarRegistros = """
+                                        DELETE FROM empregado_proxecto
+                                        WHERE NUM_PROXECTO = ?""";
+            PreparedStatement ps = connection.prepareStatement(borrarRegistros);
+            ps.setInt(1, numProyecto);
+            ps.executeUpdate();
+            ps.close();
+
+            String borrarProyecto = """
+                                        DELETE FROM proxecto
+                                        WHERE NUM_PROXECTO = ? """;
+            PreparedStatement ps2 = connection.prepareStatement(borrarProyecto);
+            ps2.setInt(1, numProyecto);
+            ps2.executeUpdate();
+            ps2.close();
+            System.out.println("El proyecto y sus registros se han borrado con éxito.");
+        }catch (SQLException e){
+            System.out.println("Error al borrar el proyecto ");
+            e.printStackTrace();
+        }
+    }
 
     public static void desconectarDB(){
         if(statement != null){
