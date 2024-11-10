@@ -12,6 +12,13 @@ public class Proxecto {
         this.num_departamento = num_departamento;
     }
 
+    public Proxecto(int num_proxecto, String nome_proxecto, String lugar, int num_departamento) {
+        this.num_proxecto = num_proxecto;
+        this.nome_proxecto = nome_proxecto;
+        this.lugar = lugar;
+        this.num_departamento = num_departamento;
+    }
+
     public int getNum_proxecto() {
         return num_proxecto;
     }
@@ -42,5 +49,19 @@ public class Proxecto {
 
     public void setNum_departamento(int num_departamento) {
         this.num_departamento = num_departamento;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Proxecto: ")
+                .append(nome_proxecto)
+                .append(" | Id: ")
+                .append(num_proxecto)
+                .append(" | Lugar: ")
+                .append(lugar)
+                .append(" | Departamento: ")
+                .append(num_departamento);
+        return sb.toString();
     }
 }

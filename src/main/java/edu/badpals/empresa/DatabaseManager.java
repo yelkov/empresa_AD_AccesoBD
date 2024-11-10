@@ -3,6 +3,8 @@ package edu.badpals.empresa;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
     private final static String URL = "jdbc:mysql://localhost:3306/bdempresa";
@@ -23,6 +25,28 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
+
+    public static void desconectarDB(){
+        if(statement != null){
+            try{
+                statement.close();
+            }catch (SQLException e){
+                System.out.println("Error al cerrar el statement");
+            }finally{
+                statement = null;
+            }
+        }if(connection != null){
+            try{
+                connection.close();
+            }catch (SQLException e){
+                System.out.println("Error al cerrar la base de datos.");
+            }finally{
+                connection = null;
+            }
+        }
+    }
+    /************************ EJERCICIO 2.1
+                                           *****************************/
 
     public static void subirSalarioDepartamento(int cantidadSubida, int numDepartamento){
         try{
@@ -99,6 +123,9 @@ public class DatabaseManager {
         }
     }
 
+    /************************ EJERCICIO 2.2
+                                            *****************************/
+
     public static void getEmpleadosLocalidad(String localidad){
         try{
             ResultSet rs = statement.executeQuery("select\n" +
@@ -148,6 +175,8 @@ public class DatabaseManager {
         }
     }
 
+    /************************ EJERCICIO 2.3
+                                            *****************************/
     public static void cambiarDepartamento(String nombreDepartamento, String nombreProyecto){
         try{
             String query = """
@@ -208,28 +237,41 @@ public class DatabaseManager {
             System.out.println("El proyecto y sus registros se han borrado con éxito.");
         }catch (SQLException e){
             System.out.println("Error al borrar el proyecto ");
-            e.printStackTrace();
         }
     }
 
-    public static void desconectarDB(){
-        if(statement != null){
+    /************************ EJERCICIO 2.4
+                                            *****************************/
+        public static List<Proxecto> getProyectosDepartamento(String nombreDepartamento){
+            List<Proxecto> proxectos = new ArrayList<>();
             try{
-                statement.close();
+                String query = """
+                        SELECT *
+                            FROM proxecto
+                            WHERE NUM_DEPARTAMENTO = (
+                                    SELECT NUM_DEPARTAMENTO
+                                    FROM departamento
+                                    WHERE NOME_DEPARTAMENTO = ?
+                                )  """;
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setString(1, nombreDepartamento);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    String nombreProyecto = rs.getString("nome_proxecto");
+                    int numProyecto = rs.getInt("num_proxecto");
+                    String lugar = rs.getString("lugar");
+                    int numDepartamento = rs.getInt("num_departamento");
+                    Proxecto proxecto = new Proxecto(numProyecto,nombreProyecto,lugar,numDepartamento);
+                    proxectos.add(proxecto);
+                }
+                rs.close();
+                ps.close();
             }catch (SQLException e){
-                System.out.println("Error al cerrar el statement");
-            }finally{
-                statement = null;
+                System.out.println("Error al obtener la lista de proyectos ");
+                e.printStackTrace();
             }
-        }if(connection != null){
-            try{
-                connection.close();
-            }catch (SQLException e){
-                System.out.println("Error al cerrar la base de datos.");
-            }finally{
-                connection = null;
-            }
-        }
+            return proxectos;
     }
+
 
 }

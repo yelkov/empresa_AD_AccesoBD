@@ -3,6 +3,7 @@ package edu.badpals.empresa;
 import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -13,7 +14,8 @@ public class Main {
 
         //ejercicio2_1();
         //ejercicio2_2();
-        ejercicio2_3();
+        //ejercicio2_3();
+        ejercicio2_4();
 
         DatabaseManager.desconectarDB();
     }
@@ -40,5 +42,12 @@ public class Main {
         Proxecto proxecto = new Proxecto("PROYECTO DE PRUEBA","CANGAS",1);
         DatabaseManager.insertProyecto(proxecto);
         DatabaseManager.borrarProyecto(1);
+    }
+
+    public static void ejercicio2_4(){
+        List<Proxecto> proxectosInformatica = DatabaseManager.getProyectosDepartamento("INFORMÁTICA");
+        proxectosInformatica.stream().forEach(proxecto -> System.out.println(proxecto));
+        List<Proxecto> proxectosDesconocido = DatabaseManager.getProyectosDepartamento("DESCONOCIDO");
+        proxectosDesconocido.stream().forEach(proxecto -> System.out.println(proxecto));
     }
 }
