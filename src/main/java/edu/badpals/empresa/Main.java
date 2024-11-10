@@ -1,10 +1,6 @@
 package edu.badpals.empresa;
 
-import javax.xml.crypto.Data;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -15,12 +11,14 @@ public class Main {
         //ejercicio2_1();
         //ejercicio2_2();
         //ejercicio2_3();
-        ejercicio2_4();
+        //ejercicio2_4();
+        ejercicio2_5();
 
         DatabaseManager.desconectarDB();
     }
 
     public static void ejercicio2_1(){
+        System.out.println("\n**************Ejercicio 2.1*************");
         DatabaseManager.subirSalarioDepartamento(27,3);
         DatabaseManager.subirSalarioDepartamento(1000,10);
         DatabaseManager.crearDepartamento(1,"VENTAS","1231231");
@@ -33,11 +31,13 @@ public class Main {
     }
 
     public static void ejercicio2_2(){
+        System.out.println("\n**************Ejercicio 2.2*************");
         DatabaseManager.getEmpleadosLocalidad("Vigo");
         DatabaseManager.getEmpleadosLocalidad("Casablanca");
     }
 
     public static void ejercicio2_3(){
+        System.out.println("\n**************Ejercicio 2.3*************");
         DatabaseManager.cambiarDepartamento("PERSOAL","XESTION DE PERSOAL");
         Proxecto proxecto = new Proxecto("PROYECTO DE PRUEBA","CANGAS",1);
         DatabaseManager.insertProyecto(proxecto);
@@ -45,9 +45,29 @@ public class Main {
     }
 
     public static void ejercicio2_4(){
+        System.out.println("\n**************Ejercicio 2.4*************");
         List<Proxecto> proxectosInformatica = DatabaseManager.getProyectosDepartamento("INFORMÁTICA");
         proxectosInformatica.stream().forEach(proxecto -> System.out.println(proxecto));
         List<Proxecto> proxectosDesconocido = DatabaseManager.getProyectosDepartamento("DESCONOCIDO");
         proxectosDesconocido.stream().forEach(proxecto -> System.out.println(proxecto));
+    }
+
+    public static void ejercicio2_5(){
+        System.out.println("\n**************Ejercicio 2.5*************");
+        /*  a)    */
+        DatabaseManager.cambioDomicilioPR("9990009","Juan Flórez",91,"2-C","15001","Coruña, A");
+        DatabaseManager.cambioDomicilioPR("9999999","Juan Flórez",91,"2-C","15001","Coruña, A");
+
+        /*  b)    */
+        Proxecto proxecto = DatabaseManager.getProxectoPR(2);
+        if(proxecto != null){
+            System.out.println(proxecto);
+        }
+        DatabaseManager.departControlaProxecPR(0);
+        DatabaseManager.departControlaProxecPR(1);
+        DatabaseManager.departControlaProxecPR(22);
+
+        /*  d)    */
+        DatabaseManager.getNumEmpregadosDep("INFORMATICA");
     }
 }

@@ -2,7 +2,6 @@ package edu.badpals.empresa;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -242,6 +241,7 @@ public class DatabaseManager {
 
     /************************ EJERCICIO 2.4
                                             *****************************/
+
         public static List<Proxecto> getProyectosDepartamento(String nombreDepartamento){
             List<Proxecto> proxectos = new ArrayList<>();
             try{
@@ -273,5 +273,121 @@ public class DatabaseManager {
             return proxectos;
     }
 
+
+    /************************ EJERCICIO 2.5
+                                            *****************************/
+
+    public static void cambioDomicilioPR(String nss_empregado, String rua, int numero_rua, String piso, String cp, String localidade ){
+        try{
+            String empleadoExiste = """
+                                        SELECT 1 
+                                        FROM EMPREGADO
+                                        WHERE NSS = ?""";
+            PreparedStatement ps = connection.prepareStatement(empleadoExiste);
+            ps.setString(1, nss_empregado);
+            ResultSet rs = ps.executeQuery();
+            if(!rs.next()){
+                System.out.println("No existe el empleado con el NSS introducido");
+                return;
+            }
+            ps.close();
+
+            String update = """
+                               CALL PR_CAMBIODOMICILIO(?,?,?,?,?,?)""";
+            CallableStatement cs = connection.prepareCall(update);
+            cs.setString(1, nss_empregado);
+            cs.setString(2, rua);
+            cs.setInt(3, numero_rua);
+            cs.setString(4, piso);
+            cs.setString(5, cp);
+            cs.setString(6, localidade);
+            cs.execute();
+            System.out.println("Se ha actualizado la dirección del empleado.");
+        }catch (SQLException e){
+            System.out.println("Error al modificar la dirección del empleado.");
+            e.printStackTrace();
+        }
+    }
+
+
+    public static Proxecto getProxectoPR(int numProxecto){
+        try{
+            String pr_datosProxectos = """
+                                          CALL PR_DATOSPROXECTOS(?,?,?,?);  """;
+            CallableStatement cs = connection.prepareCall(pr_datosProxectos);
+            cs.setInt(1, numProxecto);
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.registerOutParameter(3, Types.VARCHAR);
+            cs.registerOutParameter(4, Types.INTEGER);
+            cs.execute();
+
+            String nome_proxecto = cs.getString(2);
+            String lugar_proxecto = cs.getString(3);
+            int num_departamento = cs.getInt(4);
+
+            if(nome_proxecto != null && lugar_proxecto != null){
+                Proxecto proxecto = new Proxecto(numProxecto,nome_proxecto,lugar_proxecto,num_departamento);
+                return proxecto;
+            }
+        }catch (SQLException e){
+            System.out.println("Error al acceder al procedimiento datos proyecto.");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void departControlaProxecPR(int numProxecto){
+        try{
+            String query = """
+                            CALL PR_DEPARTCONTROLAPROXEC(?)""";
+            CallableStatement cs = connection.prepareCall(query);
+            cs.setInt(1, numProxecto);
+            boolean hayResultSet = cs.execute();
+
+            if(hayResultSet){
+                ResultSet rs = cs.getResultSet();
+                System.out.println("\nLos departamentos con " + numProxecto + " o más proyectos dirigidos son:");
+                boolean hayDepartamentos = false;
+                while(rs.next()){
+                    hayDepartamentos = true;
+                    int num_departamento = rs.getInt("num_departamento");
+                    String nome_departamento = rs.getString("nome_departamento");
+                    String nss_dirige = rs.getString("nss_dirige");
+                    Date data_direccion = rs.getDate("data_direccion");
+                    System.out.println("Id: "+num_departamento+" | Nombre: "+nome_departamento+" | Director: "+nss_dirige+" desde "+data_direccion);
+                }
+                if(!hayDepartamentos){
+                    System.out.println("No se han encontrado departamentos que cumplan la condición.");
+                }
+            }else{
+                int filasActualizadas = cs.getUpdateCount();
+                System.out.println("Se han actualizado "+filasActualizadas+" proyectos");
+            }
+
+        }catch (SQLException e){
+            System.out.println("Error al acceder a los datos de departamentos.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void getNumEmpregadosDep(String nome_departamento){
+        try{
+            String funcion = """
+                                SELECT FN_EMPDEPART(?)""";
+            CallableStatement cs = connection.prepareCall(funcion);
+            cs.setString(1, nome_departamento);
+            cs.execute();
+            ResultSet rs = cs.getResultSet();
+            if(rs.next()){
+                int numEmpregadosDep = rs.getInt(1);
+                System.out.println("El departamento "+ nome_departamento+ " tiene a "+numEmpregadosDep+" empleados trabajando.");
+            }
+            cs.close();
+            rs.close();
+        }catch (SQLException e){
+            System.out.println("Error al contar los empleados de departamento.");
+            e.printStackTrace();
+        }
+    }
 
 }
