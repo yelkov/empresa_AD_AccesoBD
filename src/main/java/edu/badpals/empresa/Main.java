@@ -12,7 +12,8 @@ public class Main {
         //ejercicio2_2();
         //ejercicio2_3();
         //ejercicio2_4();
-        ejercicio2_5();
+        //ejercicio2_5();
+        ejercicio2_6();
 
         DatabaseManager.desconectarDB();
     }
@@ -69,5 +70,9 @@ public class Main {
 
         /*  d)    */
         DatabaseManager.getNumEmpregadosDep("INFORMATICA");
+    }
+
+    public static void ejercicio2_6(){
+        DatabaseManager.getRsTypesConc();
     }
 }

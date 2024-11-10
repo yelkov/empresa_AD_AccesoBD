@@ -1,5 +1,7 @@
 package edu.badpals.empresa;
 
+import com.mysql.cj.protocol.Resultset;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -390,4 +392,28 @@ public class DatabaseManager {
         }
     }
 
+    /************************ EJERCICIO 2.6
+                                            *****************************/
+
+    public static void getRsTypesConc(){
+        try{
+            DatabaseMetaData dmd = connection.getMetaData();
+            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE))
+                System.out.println("Soporta TYPE_SCROLL_SENSITIVE y CONCUR_UPDATABLE");
+            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE))
+                System.out.println("Soporta TYPE_SCROLL_INSENSITIVE y CONCUR_UPDATABLE");
+            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE))
+                System.out.println("Soporta TYPE_FORWARD_ONLY y CONCUR_UPDATABLE");
+            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY))
+                System.out.println("Soporta TYPE_SCROLL_SENSITIVE y CONCUR_READ_ONLY");
+            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY))
+                System.out.println("Soporta TYPE_SCROLL_INSENSITIVE y CONCUR_READ_ONLY");
+            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY))
+                System.out.println("Soporta TYPE_FORWARD_ONLY y CONCUR_READ_ONLY");
+
+        }catch (SQLException e){
+            System.out.println("Error al contar los empleados de departamento.");
+            e.printStackTrace();
+        }
+    }
 }
