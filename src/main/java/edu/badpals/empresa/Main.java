@@ -1,5 +1,6 @@
 package edu.badpals.empresa;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -74,5 +75,14 @@ public class Main {
 
     public static void ejercicio2_6(){
         DatabaseManager.getRsTypesConc();
+        Proxecto proxecto = new Proxecto(11,"PROXECTO DE PROBA","LUGO",1);
+        DatabaseManager.insertProxectoDinamico(proxecto);
+        Proxecto proxecto2 = new Proxecto(11,"PROXECTO DE PROBA","LUGO",1);
+        DatabaseManager.insertProxectoDinamico(proxecto2);
+        Proxecto proxecto3 = new Proxecto(15,"PROXECTO DE PROBA","LUGO",20);
+        DatabaseManager.insertProxectoDinamico(proxecto3);
+        DatabaseManager.incrementarSalarioDin(3,1);
+        DatabaseManager.getEmpregadosCantProxectos(1);
+
     }
 }

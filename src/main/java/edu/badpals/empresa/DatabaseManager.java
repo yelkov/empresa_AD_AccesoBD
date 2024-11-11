@@ -1,7 +1,5 @@
 package edu.badpals.empresa;
 
-import com.mysql.cj.protocol.Resultset;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -415,5 +413,160 @@ public class DatabaseManager {
             System.out.println("Error al contar los empleados de departamento.");
             e.printStackTrace();
         }
+    }
+
+    public static void insertProxectoDinamico(Proxecto proxecto){
+        try{
+            if (!existeProyecto(proxecto) && existeDepartamento(proxecto.getNum_departamento())){
+                Statement st = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = st.executeQuery("SELECT * FROM PROXECTO");
+                rs.moveToInsertRow();
+                rs.updateString("nome_proxecto",proxecto.getNome_proxecto());
+                rs.updateInt("num_proxecto",proxecto.getNum_proxecto());
+                rs.updateString("lugar",proxecto.getLugar());
+                rs.updateInt("num_departamento",proxecto.getNum_departamento());
+
+                rs.insertRow();
+                rs.close();
+                st.close();
+                System.out.println("Proxecto insertado correctamente.");
+            }else{
+                System.out.println("El proyecto ya existe con ese nombre o ese ID o bien el departamento no existe.");
+            }
+        }catch (SQLException e){
+            System.out.println("Error al insertar dinámicamente un proyecto.");
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean existeProyecto(Proxecto proxecto){
+        boolean hasNum = false;
+        boolean hasNome = false;
+        try{
+
+            String query = """
+                                SELECT 1
+                                    FROM proxecto
+                                    WHERE NUM_PROXECTO = ?""";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1,proxecto.getNum_proxecto());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                hasNum = true;
+            }
+            rs.close();
+            ps.close();
+
+
+            String query2 = """
+                                SELECT 1
+                                    FROM proxecto
+                                    WHERE NOME_PROXECTO = ?""";
+            PreparedStatement ps2 = connection.prepareStatement(query2);
+            ps2.setString(1,proxecto.getNome_proxecto());
+            ResultSet rs2 = ps2.executeQuery();
+            if(rs2.next()){
+                hasNome = true;
+            }
+            rs2.close();
+            ps2.close();
+
+        }catch (SQLException e){
+            System.out.println("Error al contar los empleados de departamento.");
+            e.printStackTrace();
+        }
+
+        return hasNum || hasNome;
+    }
+
+    public static boolean existeDepartamento(int num_departamento){
+        boolean hasDept = false;
+        try{
+            String query = """
+                                SELECT 1
+                                FROM DEPARTAMENTO
+                                WHERE NUM_DEPARTAMENTO = ?""";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1,num_departamento);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                hasDept = true;
+            }
+            rs.close();
+            ps.close();
+
+        }catch (SQLException e){
+            System.out.println("Error al contar los empleados de departamento.");
+            e.printStackTrace();
+        }
+        return hasDept;
+    }
+
+    public static void incrementarSalarioDin(int cantidad, int num_departamento){
+        try{
+            int filasAfectadas = 0;
+            Statement st = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = st.executeQuery("SELECT * FROM EMPREGADO WHERE NUM_DEPARTAMENTO_PERTENECE = '"+num_departamento+"'");
+            while(rs.next()){
+                rs.updateFloat("SALARIO", rs.getFloat("SALARIO")+cantidad);
+                filasAfectadas++;
+                rs.updateRow();
+            }
+            System.out.println("Se han actualizado "+filasAfectadas+" empleados.");
+        }catch (SQLException e){
+            System.out.println("Error al subir salario dinámicamente.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void getEmpregadosCantProxectos(int numProxectos){
+        try{
+            String query = """
+                            SELECT  NSS,
+                                    CONCAT(NOME,' ',APELIDO_1,' ',APELIDO_2) AS NOME_COMPLETO,
+                                    LOCALIDADE,
+                                    SALARIO
+                            FROM EMPREGADO
+                            WHERE NSS IN (
+                                            SELECT NSS_EMPREGADO
+                                            FROM EMPREGADO_PROXECTO
+                                            GROUP BY NSS_EMPREGADO
+                                            HAVING COUNT(*) > ?
+                                         )""";
+            PreparedStatement ps = connection.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            ps.setInt(1,numProxectos);
+            ResultSet rs = ps.executeQuery();
+            if(rs.first()){
+                System.out.println("\nPrimera línea del ResultSet");
+                mostrarDatosEmpleado(rs);
+            }
+            if(rs.last()){
+                System.out.println("\nÚltima línea del ResultSet");
+                mostrarDatosEmpleado(rs);
+                if(rs.previous() && rs.previous()){
+                    System.out.println("\nAntepenúltima línea del ResultSet");
+                    mostrarDatosEmpleado(rs);
+                }
+            }
+            rs.afterLast();
+            System.out.println("\nMostrar datos de atrás hacia adelante: ");
+            while(rs.previous()){
+                    mostrarDatosEmpleado(rs);
+
+            }
+
+
+        }catch (SQLException e){
+            System.out.println("Error al seleccionar empleados que trabajen en más de "+numProxectos+" proyectos.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void mostrarDatosEmpleado(ResultSet rs) throws SQLException {
+        String nss = rs.getString("NSS");
+        String nome_completo = rs.getString("NOME_COMPLETO");
+        String localidade = rs.getString("LOCALIDADE");
+        double salario = rs.getDouble("SALARIO");
+        System.out.println("Nombre: " +nome_completo+" | Nss: " +nss+ " | Localidade: "+localidade+ " | Salario: "+salario);
     }
 }
