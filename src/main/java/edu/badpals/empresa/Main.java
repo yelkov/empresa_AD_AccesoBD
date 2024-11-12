@@ -14,9 +14,15 @@ public class Main {
         //ejercicio2_3();
         //ejercicio2_4();
         //ejercicio2_5();
-        ejercicio2_6();
+        //ejercicio2_6();
 
         DatabaseManager.desconectarDB();
+
+        DatabaseMetadatos.conectarDB();
+        DatabaseMetadatos.mostrarInformacionBasica();
+
+
+        DatabaseMetadatos.desconectarDB();
     }
 
     public static void ejercicio2_1(){
