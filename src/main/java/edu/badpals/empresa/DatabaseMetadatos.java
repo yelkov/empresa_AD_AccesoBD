@@ -161,4 +161,31 @@ public class DatabaseMetadatos {
         }
     }
 
+    public static void mostrarInfoProcFunCarac(){
+        try{
+            DatabaseMetaData dbmd = connection.getMetaData();
+            System.out.println("Funciones de cadena disponibles: " + dbmd.getStringFunctions());
+            System.out.println("Funciones de fecha y hora disponibles: " + dbmd.getTimeDateFunctions());
+            System.out.println("Funciones matemáticas disponibles: " + dbmd.getNumericFunctions());
+            System.out.println("Funciones de sistema disponibles: " + dbmd.getSystemFunctions());
+
+
+            System.out.println("Palabras reservadas: " + dbmd.getSQLKeywords());
+
+
+            System.out.println("Delimitador de identificadores: " + dbmd.getIdentifierQuoteString());
+
+
+            System.out.println("Cadena de escape de caracteres comodín: " + dbmd.getSearchStringEscape());
+
+            boolean procedimientosPermitidos = dbmd.allProceduresAreCallable();
+            boolean tablasPermitidas = dbmd.allTablesAreSelectable();
+            System.out.println("El usuario puede llamar a todos los procedimientos: " + (procedimientosPermitidos ? "Sí" : "No"));
+            System.out.println("El usuario puede acceder a todas las tablas: " + (tablasPermitidas ? "Sí" : "No"));
+        }catch (SQLException e){
+            System.out.println("Error al mostrar caracteristicas de funciones, matematicas, procedimientos.");
+            e.printStackTrace();
+        }
+    }
+
 }

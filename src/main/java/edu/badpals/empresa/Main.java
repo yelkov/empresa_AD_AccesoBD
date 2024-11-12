@@ -18,6 +18,8 @@ public class Main {
 
         DatabaseMetadatos.conectarDB();
         ejercicio3_2();
+        System.out.println();
+        ejercicio3_3();
         DatabaseMetadatos.desconectarDB();
     }
 
@@ -95,5 +97,8 @@ public class Main {
         DatabaseMetadatos.mostrarProceduresBDEmpresa();
         DatabaseMetadatos.mostrarClavesPrimarias(null,"proxecto");
         DatabaseMetadatos.mostrarClavesForaneas(null,"empregado_proxecto");
+    }
+    public static void ejercicio3_3(){
+        DatabaseMetadatos.mostrarInfoProcFunCarac();
     }
 }
