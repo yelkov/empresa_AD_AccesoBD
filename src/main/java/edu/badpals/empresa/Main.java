@@ -8,22 +8,19 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         DatabaseManager.conectarDB();
-
         //ejercicio2_1();
         //ejercicio2_2();
         //ejercicio2_3();
         //ejercicio2_4();
         //ejercicio2_5();
         //ejercicio2_6();
-
         DatabaseManager.desconectarDB();
 
         DatabaseMetadatos.conectarDB();
-        DatabaseMetadatos.mostrarInformacionBasica();
-
-
+        ejercicio3_2();
         DatabaseMetadatos.desconectarDB();
     }
+
 
     public static void ejercicio2_1(){
         System.out.println("\n**************Ejercicio 2.1*************");
@@ -90,5 +87,13 @@ public class Main {
         DatabaseManager.incrementarSalarioDin(3,1);
         DatabaseManager.getEmpregadosCantProxectos(1);
 
+    }
+    private static void ejercicio3_2() {
+        DatabaseMetadatos.mostrarInformacionBasica();
+        DatabaseMetadatos.mostrarTablasUsuarioBDEmpresa();
+        DatabaseMetadatos.mostrarColumnas(null,"empregado");
+        DatabaseMetadatos.mostrarProceduresBDEmpresa();
+        DatabaseMetadatos.mostrarClavesPrimarias(null,"proxecto");
+        DatabaseMetadatos.mostrarClavesForaneas(null,"empregado_proxecto");
     }
 }
