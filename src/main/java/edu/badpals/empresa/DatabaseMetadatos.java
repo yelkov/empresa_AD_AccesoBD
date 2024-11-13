@@ -206,11 +206,20 @@ public class DatabaseMetadatos {
 
 
         }catch (SQLException e){
-            System.out.println("Error al mostrar caracteristicas de funciones, matematicas, procedimientos.");
+            System.out.println("Error al mostrar los límites del conector.");
             e.printStackTrace();
         }
+    }
 
-
-
+    public static void mostrarInfoTransacciones(){
+        try{
+            DatabaseMetaData dbmd = connection.getMetaData();
+            System.out.println("Soporta transacciones: "+(dbmd.supportsTransactions()?"Sí":"No"));
+            System.out.println("Nivel de aislamiento de las transacciones predeterminado: "+dbmd.getDefaultTransactionIsolation());
+            System.out.println("Soporta sentenzas de manipulación de datos e de definición de datos dentro das transaccións: "+(dbmd.supportsDataDefinitionAndDataManipulationTransactions()?"Sí":"No"));
+        }catch (SQLException e){
+            System.out.println("Error al mostrar información sobre transacciones.");
+            e.printStackTrace();
+        }
     }
 }

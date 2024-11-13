@@ -22,6 +22,8 @@ public class Main {
         ejercicio3_3();
         System.out.println();
         ejercicio3_4();
+        System.out.println();
+        ejercicio3_5();
         DatabaseMetadatos.desconectarDB();
     }
 
@@ -106,5 +108,9 @@ public class Main {
 
     public static void ejercicio3_4(){
         DatabaseMetadatos.mostrarLimitesConector();
+    }
+
+    public static void ejercicio3_5(){
+        DatabaseMetadatos.mostrarInfoTransacciones();
     }
 }
