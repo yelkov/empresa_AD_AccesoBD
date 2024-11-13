@@ -395,18 +395,18 @@ public class DatabaseManager {
 
     public static void getRsTypesConc(){
         try{
-            DatabaseMetaData dmd = connection.getMetaData();
-            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE))
+            DatabaseMetaData dbmd = connection.getMetaData();
+            if (dbmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE))
                 System.out.println("Soporta TYPE_SCROLL_SENSITIVE y CONCUR_UPDATABLE");
-            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE))
+            if (dbmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE))
                 System.out.println("Soporta TYPE_SCROLL_INSENSITIVE y CONCUR_UPDATABLE");
-            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE))
+            if (dbmd.supportsResultSetConcurrency(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE))
                 System.out.println("Soporta TYPE_FORWARD_ONLY y CONCUR_UPDATABLE");
-            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY))
+            if (dbmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY))
                 System.out.println("Soporta TYPE_SCROLL_SENSITIVE y CONCUR_READ_ONLY");
-            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY))
+            if (dbmd.supportsResultSetConcurrency(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY))
                 System.out.println("Soporta TYPE_SCROLL_INSENSITIVE y CONCUR_READ_ONLY");
-            if (dmd.supportsResultSetConcurrency(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY))
+            if (dbmd.supportsResultSetConcurrency(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY))
                 System.out.println("Soporta TYPE_FORWARD_ONLY y CONCUR_READ_ONLY");
 
         }catch (SQLException e){

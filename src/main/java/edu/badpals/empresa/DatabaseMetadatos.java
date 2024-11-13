@@ -188,4 +188,29 @@ public class DatabaseMetadatos {
         }
     }
 
+
+    public static void mostrarLimitesConector(){
+        try{
+            DatabaseMetaData dbmd = connection.getMetaData();
+            System.out.println("Número máx. de conexiones simultáneas: "+ (dbmd.getMaxConnections() == 0? "Sin límite o límite desconocido": dbmd.getMaxConnections()));
+            System.out.println("Número máx. de sentencias simultáneas: "+ (dbmd.getMaxStatements() == 0? "Sin límite o límite desconocido": dbmd.getMaxStatements()));
+            System.out.println("Número máx. de tablas en una consulta SELECT: "+dbmd.getMaxTablesInSelect());
+            System.out.println("Longitud máx. del nombre de una tabla: "+dbmd.getMaxTableNameLength());
+            System.out.println("Longitud máx. del nombre de una columna: "+dbmd.getMaxColumnNameLength());
+            System.out.println("Longitud máx. del nombre de una sentencia: "+dbmd.getMaxStatementLength());
+            System.out.println("Longitud máx. del nombre de una fila: "+dbmd.getMaxRowSize());
+            System.out.println("Longitud máx. del nombre de una procedimiento: "+dbmd.getMaxProcedureNameLength());
+            System.out.println("Número máx. de columnas que se pueden usar en un ORDER: "+dbmd.getMaxColumnsInOrderBy());
+            System.out.println("Número máx. de columnas que se pueden usar en un SELECT: "+dbmd.getMaxColumnsInSelect());
+            System.out.println("Número máx. de columnas que se pueden usar en un GROUP BY: "+dbmd.getMaxColumnsInGroupBy());
+
+
+        }catch (SQLException e){
+            System.out.println("Error al mostrar caracteristicas de funciones, matematicas, procedimientos.");
+            e.printStackTrace();
+        }
+
+
+
+    }
 }
