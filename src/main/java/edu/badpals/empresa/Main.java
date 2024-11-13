@@ -24,6 +24,10 @@ public class Main {
         ejercicio3_4();
         System.out.println();
         ejercicio3_5();
+        System.out.println();
+        ejercicio3_6();
+        System.out.println();
+        ejercicio3_7();
         DatabaseMetadatos.desconectarDB();
     }
 
@@ -113,4 +117,13 @@ public class Main {
     public static void ejercicio3_5(){
         DatabaseMetadatos.mostrarInfoTransacciones();
     }
+
+    public static void ejercicio3_6(){
+        DatabaseMetadatos.mostrarSoporteCaract();
+    }
+
+    public static void ejercicio3_7(){
+        DatabaseMetadatos.mostrarMetaDatosResSet("SELECT * from bdempresa.empregado");
+    }
+
 }

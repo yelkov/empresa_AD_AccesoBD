@@ -222,4 +222,51 @@ public class DatabaseMetadatos {
             e.printStackTrace();
         }
     }
+
+    public static void mostrarSoporteCaract(){
+        try{
+            DatabaseMetaData dbmd = connection.getMetaData();
+            System.out.println("La instrucción ALTER TABLE se puede utilizar ADD COLUMN y DROP COLUMN: "+(dbmd.supportsAlterTableWithAddColumn()?"Sí":"No"));
+            System.out.println("Los alias de columnas se puede utilizar la palabra AS: "+(dbmd.supportsColumnAliasing()?"Sí":"No"));
+            System.out.println("El resultado de concatenar un valor NULL con uno NOT NULL da como resultado NULL: "+(dbmd.nullPlusNonNullIsNull()?"Sí":"No"));
+            System.out.println("Se soportan las conversiones entre tipos de datos JDBC: "+(dbmd.supportsConvert()?"Sí":"No"));
+            System.out.println("Se soportan los nombres de tablas correlacionadas: "+(dbmd.supportsTableCorrelationNames()?"Sí":"No"));
+            System.out.println("Se permite usar una columna que no esté en la instrucción SELECT en una cláusula ORDER BY: "+(dbmd.supportsOrderByUnrelated()?"Sí":"No"));
+            System.out.println("Se soporta la cláusula GROUP BY: "+(dbmd.supportsGroupBy()?"Sí":"No"));
+            System.out.println("Se permite el uso de una columna que no esté en la instrucción SELECT en una cláusula GROUP BY: "+(dbmd.supportsGroupByUnrelated()?"Sí":"No"));
+            System.out.println("Se soportan las cláusulas LIKE: "+(dbmd.supportsLikeEscapeClause()?"Sí":"No"));
+            System.out.println("Se soportan los outer joins: "+(dbmd.supportsOuterJoins()?"Sí":"No"));
+            System.out.println("Se soportan subconsultas EXISTS: "+(dbmd.supportsSubqueriesInExists()?"Sí":"No"));
+            System.out.println("Se soportan subconsultas en expresiones de comparación IN: "+(dbmd.supportsSubqueriesInIns()?"Sí":"No"));
+            System.out.println("Se soportan subconsultas en expresiones de comparación en expresiones cuantificadas.: "+(dbmd.supportsSubqueriesInQuantifieds()?"Sí":"No"));
+
+
+        }catch (SQLException e){
+            System.out.println("Error al mostrar información sobre soporte de características.");
+            e.printStackTrace();
+        }
+    }
+
+    //e por cada columna: o nome, tipo, tamaño e si admite ou non nulos.
+
+    public static void mostrarMetaDatosResSet(String consulta){
+        try{
+            ResultSet rs = statement.executeQuery(consulta);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int numColumnas = rsmd.getColumnCount();
+            System.out.println("\niNFORMACIÓN SOBRE COLUMNAS. TOTAL DE COLUMNAS EN LA CONSULTA: "+numColumnas);
+            for (int i = 1; i <= numColumnas; i++){
+                    String nombreColumna = rsmd.getColumnName(i);
+                    String tipoColumna = rsmd.getColumnTypeName(i);
+                    int tamañoColumna = rsmd.getColumnDisplaySize(i);
+                    String admiteNulos = rsmd.isNullable(i) == 1? "Sí":"No";
+                    System.out.println("Nombre de columna: "+nombreColumna+" | Tipo: "+tipoColumna+" | Tamaño: "+tamañoColumna+ " | Admite nulos: "+admiteNulos);
+            }
+
+
+        }catch (SQLException e){
+            System.out.println("Error al mostrar metadatos del ResultSet.");
+            e.printStackTrace();
+        }
+    }
 }
